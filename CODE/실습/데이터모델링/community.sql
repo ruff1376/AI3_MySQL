@@ -1,0 +1,100 @@
+-- Active: 1745889701130@@127.0.0.1@3306@community
+
+-- DROP DATABASE IF EXISTS `community`;
+-- CREATE DATABASE `community`
+--     DEFAULT CHARACTER SET = 'utf8mb4';
+
+
+DROP TABLE IF EXISTS `posts`;
+
+CREATE TABLE `posts` (
+	`no`	BIGINT	NOT NULL	COMMENT '번호',
+	`id`	VARCHAR(64)	NOT NULL	COMMENT 'UK',
+	`user_no`	BIGINT	NOT NULL	COMMENT '회원번호',
+	`title`	VARCHAR(100)	NOT NULL	COMMENT '제목',
+	`content`	TEXT	NULL	COMMENT '내용',
+	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '등록일자',
+	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '수정일자'
+);
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+	`no`	BIGINT	NOT NULL	COMMENT '회원번호',
+	`id`	VARCHAR(64)	NOT NULL	COMMENT 'UK',
+	`username`	VARCHAR(100)	NOT NULL	COMMENT '아이디',
+	`password`	VARCHAR(100)	NOT NULL	COMMENT '비밀번호',
+	`name`	VARCHAR(50)	NOT NULL	COMMENT '이름',
+	`email`	VARCHAR(200)	NOT NULL	COMMENT '이메일',
+	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '등록일자',
+	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '수정일자'
+);
+
+DROP TABLE IF EXISTS `comments`;
+
+CREATE TABLE `comments` (
+	`no`	BIGINT	NOT NULL	COMMENT '댓글번호',
+	`id`	VARCHAR(64)	NOT NULL	COMMENT 'UK',
+	`post_no`	BIGINT	NOT NULL	COMMENT '게시글번호',
+	`user_no`	BIGINT	NOT NULL	COMMENT '회원번호',
+	`content`	TEXT	NOT NULL	COMMENT '내용',
+	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '등록일자',
+	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '수정일자'
+);
+
+DROP TABLE IF EXISTS `files`;
+
+CREATE TABLE `files` (
+	`no`	BIGINT	NOT NULL	COMMENT '파일번호',
+	`id`	VARCHAR(64)	NOT NULL	COMMENT 'UK',
+	`post_no`	BIGINT	NOT NULL	COMMENT '게시글번호',
+	`file_name`	VARCHAR(100)	NOT NULL	COMMENT '파일명',
+	`file_path`	VARCHAR(2000)	NOT NULL	COMMENT '파일경로',
+	`created_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '등록일자',
+	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '수정일자'
+);
+
+ALTER TABLE `posts` ADD CONSTRAINT `PK_POSTS` PRIMARY KEY (
+	`no`
+);
+
+ALTER TABLE `users` ADD CONSTRAINT `PK_USERS` PRIMARY KEY (
+	`no`
+);
+
+ALTER TABLE `comments` ADD CONSTRAINT `PK_COMMENTS` PRIMARY KEY (
+	`no`
+);
+
+ALTER TABLE `files` ADD CONSTRAINT `PK_FILES` PRIMARY KEY (
+	`no`
+);
+
+ALTER TABLE `posts` ADD CONSTRAINT `FK_users_TO_posts_1` FOREIGN KEY (
+	`user_no`
+)
+REFERENCES `users` (
+	`no`
+);
+
+ALTER TABLE `comments` ADD CONSTRAINT `FK_posts_TO_comments_1` FOREIGN KEY (
+	`post_no`
+)
+REFERENCES `posts` (
+	`no`
+);
+
+ALTER TABLE `comments` ADD CONSTRAINT `FK_users_TO_comments_1` FOREIGN KEY (
+	`user_no`
+)
+REFERENCES `users` (
+	`no`
+);
+
+ALTER TABLE `files` ADD CONSTRAINT `FK_posts_TO_files_1` FOREIGN KEY (
+	`post_no`
+)
+REFERENCES `posts` (
+	`no`
+);
+
